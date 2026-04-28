@@ -27,17 +27,28 @@ WORKDIR /var/www
 # Copy project files
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-dev
+# Create SQLite database FIRST
+RUN mkdir -p /var/database
+RUN touch /var/database/database.sqlite
+
+# Create .env file for production
+RUN cp .env.example .env || true
+RUN echo "DB_CONNECTION=sqlite" >> .env
+RUN echo "DB_DATABASE=/var/database/database.sqlite" >> .env
+
+# Install PHP dependencies (without running package:discover)
+RUN composer install --no-dev --no-scripts
+
+# Now run package:discover and other scripts
+RUN composer run-script post-autoload-dump
 
 # Install Node dependencies and build
 RUN npm install && npm run build
 
-# Create SQLite database
-RUN mkdir -p /var/database && touch /var/database/database.sqlite
-RUN php artisan migrate --force
-RUN php artisan db:seed --force
-RUN php artisan storage:link
+# Run migrations
+RUN php artisan migrate --force || true
+RUN php artisan db:seed --force || true
+RUN php artisan storage:link || true
 
 EXPOSE 10000
 
