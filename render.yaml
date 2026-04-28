@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: hamza-portfolio
+    env: php
+    buildCommand: chmod +x render-build.sh && ./render-build.sh && composer install --no-dev && npm install && npm run build
+    startCommand: php artisan serve --host=0.0.0.0 --port=10000
