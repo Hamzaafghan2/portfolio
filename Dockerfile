@@ -9,11 +9,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
 COPY . .
 
-# Install dependencies
 RUN composer install --no-dev --no-interaction
 RUN npm install && npm run build
 
-# Make start script executable
 RUN chmod +x start.sh
 
 EXPOSE 10000
