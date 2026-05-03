@@ -368,31 +368,72 @@ export default function AdminDashboard() {
 
                 {/* SKILLS */}
                 {activeTab === 'skills' && (
-                    <div className="bg-white rounded-xl p-6 shadow-lg">
-                        <h2 className="text-xl font-bold mb-6">{editing ? '✏️ Edit' : '➕ Add'} Skill</h2>
-                        <form onSubmit={saveSkill} className="space-y-4 max-w-3xl mb-8">
-                            <div className="grid grid-cols-4 gap-4">
-                                <input name="name" placeholder="Name" defaultValue={editing?.name || ''} required className="px-4 py-2 rounded-lg border" />
-                                <input name="icon" placeholder="Icon emoji" defaultValue={editing?.icon || ''} className="px-4 py-2 rounded-lg border" />
-                                <input name="percentage" type="number" placeholder="%" defaultValue={editing?.percentage || ''} min="0" max="100" required className="px-4 py-2 rounded-lg border" />
-                                <input name="order" type="number" placeholder="Order" defaultValue={editing?.order || skills.length + 1} className="px-4 py-2 rounded-lg border" />
-                            </div>
-                            <div className="flex gap-3">
-                                <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg">{editing ? '💾 Update' : '➕ Add'}</button>
-                                {editing && <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 bg-gray-500 text-white rounded-lg">Cancel</button>}
-                            </div>
-                        </form>
-                        {skills.map(skill => (
-                            <div key={skill.id} className="flex justify-between p-4 bg-gray-50 rounded-lg mb-2">
-                                <div><span className="text-2xl">{skill.icon}</span> <span className="font-medium">{skill.name}</span> - {skill.percentage}%</div>
-                                <div className="flex gap-2">
-                                    <button onClick={() => editSkill(skill)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm">✏️</button>
-                                    <button onClick={() => deleteSkill(skill.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm">🗑️</button>
-                                </div>
-                            </div>
-                        ))}
+    <div className="bg-white rounded-xl p-6 shadow-lg">
+        <h2 className="text-xl font-bold mb-6">{editing ? '✏️ Edit' : '➕ Add'} Skill</h2>
+        <form onSubmit={saveSkill} className="space-y-4 max-w-3xl mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* Skill Name */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Skill Name *</label>
+                    <input name="name" placeholder="e.g. Laravel" defaultValue={editing?.name || ''} required 
+                        className="w-full px-4 py-2 rounded-lg border" />
+                </div>
+
+                {/* Icon */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Icon (Emoji)</label>
+                    <input name="icon" placeholder="e.g. ⚡" defaultValue={editing?.icon || ''} 
+                        className="w-full px-4 py-2 rounded-lg border" />
+                </div>
+
+                {/* Percentage */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Percentage (%) *</label>
+                        <input name="percentage" type="number" placeholder="95" defaultValue={editing?.percentage || ''} 
+                            min="0" max="100" required className="w-full px-4 py-2 rounded-lg border" />
                     </div>
-                )}
+
+                    {/* Order */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+                        <input name="order" type="number" placeholder="1" defaultValue={editing?.order || skills.length + 1} 
+                            className="w-full px-4 py-2 rounded-lg border" />
+                    </div>
+                </div>
+
+                <div className="flex gap-3">
+                    <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                        {editing ? '💾 Update Skill' : '➕ Add Skill'}
+                    </button>
+                    {editing && (
+                        <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                            Cancel
+                        </button>
+                    )}
+                </div>
+            </form>
+
+            {/* Skills List */}
+            {skills.length > 0 ? (
+                skills.map(skill => (
+                    <div key={skill.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-2">
+                        <div className="flex items-center gap-3">
+                            <span className="text-2xl">{skill.icon}</span>
+                            <span className="font-medium">{skill.name}</span>
+                            <span className="text-sm text-gray-500">- {skill.percentage}%</span>
+                            <span className="text-xs text-gray-400">(Order: {skill.order})</span>
+                        </div>
+                        <div className="flex gap-2">
+                            <button onClick={() => editSkill(skill)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">✏️</button>
+                            <button onClick={() => deleteSkill(skill.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">🗑️</button>
+                        </div>
+                    </div>
+                ))
+            ) : (
+                <p className="text-gray-500 text-center py-4">No skills added yet.</p>
+            )}
+        </div>
+    )}
 
           {/* PROJECTS */}
 {activeTab === 'projects' && (
@@ -441,32 +482,76 @@ export default function AdminDashboard() {
             </div>
         )}
 
-                 {activeTab === 'services' && (
+            {/* Services  */}
+            {activeTab === 'services' && (
     <div className="bg-white rounded-xl p-6 shadow-lg">
         <h2 className="text-xl font-bold mb-6">{editing ? '✏️ Edit' : '➕ Add'} Service</h2>
         <form onSubmit={saveService} className="space-y-4 max-w-3xl mb-8">
-            <div className="grid grid-cols-3 gap-4">
-                <input name="icon" placeholder="Icon emoji" defaultValue={editing?.icon || ''} className="px-4 py-2 rounded-lg border" />
-                <input name="title" placeholder="Title" defaultValue={editing?.title || ''} required className="px-4 py-2 rounded-lg border" />
-                <input name="order" type="number" placeholder="Order" defaultValue={editing?.order || services.length + 1} className="px-4 py-2 rounded-lg border" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Icon */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Icon (Emoji)</label>
+                    <input name="icon" placeholder="e.g. 🌐" defaultValue={editing?.icon || ''} 
+                        className="w-full px-4 py-2 rounded-lg border" />
+                </div>
+
+                {/* Title */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Service Title *</label>
+                    <input name="title" placeholder="e.g. Web Development" defaultValue={editing?.title || ''} required 
+                        className="w-full px-4 py-2 rounded-lg border" />
+                </div>
+
+                {/* Order */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+                    <input name="order" type="number" placeholder="1" defaultValue={editing?.order || services.length + 1} 
+                        className="w-full px-4 py-2 rounded-lg border" />
+                </div>
             </div>
-            <textarea name="description" rows="3" placeholder="Description" defaultValue={editing?.description || ''} className="w-full px-4 py-2 rounded-lg border" />
+
+            {/* Description */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                <textarea name="description" rows="3" placeholder="Describe the service..." defaultValue={editing?.description || ''} required 
+                    className="w-full px-4 py-2 rounded-lg border"></textarea>
+            </div>
+
+            {/* Buttons */}
             <div className="flex gap-3">
-                <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg">{editing ? '💾 Update' : '➕ Add'}</button>
-                {editing && <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 bg-gray-500 text-white rounded-lg">Cancel</button>}
+                <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                    {editing ? '💾 Update Service' : '➕ Add Service'}
+                </button>
+                {editing && (
+                    <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        Cancel
+                    </button>
+                )}
             </div>
         </form>
-        {services.map(s => (
-            <div key={s.id} className="flex justify-between p-4 bg-gray-50 rounded-lg mb-2">
-                <div><span className="text-2xl">{s.icon}</span> <span className="font-medium">{s.title}</span></div>
-                        <div className="flex gap-2">
-                            <button onClick={() => setEditing(s)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm">✏️</button>
-                            <button onClick={() => deleteService(s.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm">🗑️</button>
+
+        {/* Services List */}
+        {services.length > 0 ? (
+            services.map(s => (
+                <div key={s.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-2">
+                    <div className="flex items-center gap-3">
+                        <span className="text-2xl">{s.icon}</span>
+                        <div>
+                            <span className="font-medium">{s.title}</span>
+                            <span className="text-xs text-gray-400 ml-2">(Order: {s.order})</span>
                         </div>
                     </div>
-                ))}
-            </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => setEditing(s)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">✏️</button>
+                        <button onClick={() => deleteService(s.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">🗑️</button>
+                    </div>
+                </div>
+            ))
+        ) : (
+            <p className="text-gray-500 text-center py-4">No services added yet.</p>
         )}
+    </div>
+)}
 
 
         {/* testimoials */}
@@ -566,76 +651,169 @@ export default function AdminDashboard() {
                     {/* NEWS TAB */}
 
         {activeTab === 'news' && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                <h2 className="text-xl font-bold mb-6">{editing ? '✏️ Edit News' : '➕ Add News'}</h2>
-            
-
+    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+        <h2 className="text-xl font-bold mb-6">{editing ? '✏️ Edit News' : '➕ Add News'}</h2>
+        
         <form onSubmit={saveNews} className="space-y-4 max-w-3xl mb-8">
-    <input name="title" placeholder="Title" defaultValue={editing?.title || ''} required className="w-full px-4 py-2 rounded-lg border" />
-    <input name="category" placeholder="Category" defaultValue={editing?.category || 'General'} className="w-full px-4 py-2 rounded-lg border" />
-    <textarea name="excerpt" rows="2" placeholder="Excerpt" defaultValue={editing?.excerpt || ''} className="w-full px-4 py-2 rounded-lg border" />
-    <textarea name="content" rows="5" placeholder="Content" defaultValue={editing?.content || ''} required className="w-full px-4 py-2 rounded-lg border" />
-    
-    {/* Image Upload */}
-    <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">News Image</label>
-        {editing?.image && (
-            <div className="mb-2">
-                <img src={editing.image} alt="Current" className="w-32 h-20 object-cover rounded border" />
+            {/* Title */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                <input name="title" placeholder="e.g. New Project Launched" defaultValue={editing?.title || ''} required 
+                    className="w-full px-4 py-2 rounded-lg border" />
             </div>
-        )}
-        <input type="file" name="image" accept="image/*" className="w-full px-4 py-2 rounded-lg border bg-white" />
-    </div>
 
-    <label className="flex items-center gap-2"><input type="checkbox" name="published" defaultChecked={editing?.published !== false} /> Published</label>
-    <div className="flex gap-3">
-        <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg">{editing ? '💾 Update' : '➕ Add'}</button>
-        {editing && <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 bg-gray-500 text-white rounded-lg">Cancel</button>}
-    </div>
-</form>
-        {newsList.map(item => (
-            <div key={item.id} className="flex justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-2">
-                <div>
-                    <span className="font-medium">{item.title}</span>
-                    <span className="text-xs ml-2 bg-blue-100 dark:bg-blue-900 px-2 py-0.5 rounded">{item.category}</span>
-                    {!item.published && <span className="text-xs ml-2 bg-red-100 px-2 py-0.5 rounded">Draft</span>}
-                </div>
-                <div className="flex gap-2">
-                    <button onClick={() => editNews(item)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm">✏️</button>
-                    <button onClick={() => deleteNews(item.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm">🗑️</button>
-                </div>
+            {/* Category */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <input name="category" placeholder="e.g. General, Project, Learning" defaultValue={editing?.category || 'General'} 
+                    className="w-full px-4 py-2 rounded-lg border" />
             </div>
-        ))}
-    </div>
-)} 
 
-                {/* EXPERIENCES */}
-                {activeTab === 'experiences' && (
-                    <div className="bg-white rounded-xl p-6 shadow-lg">
-                        <h2 className="text-xl font-bold mb-6">{editing ? '✏️ Edit' : '➕ Add'} Experience</h2>
-                        <form onSubmit={saveExperience} className="space-y-4 max-w-3xl mb-8">
-                            <div className="grid grid-cols-3 gap-4">
-                                <input name="title" placeholder="Job Title" defaultValue={editing?.title || ''} required className="px-4 py-2 rounded-lg border" />
-                                <input name="company" placeholder="Company" defaultValue={editing?.company || ''} required className="px-4 py-2 rounded-lg border" />
-                                <input name="duration" placeholder="Duration" defaultValue={editing?.duration || ''} required className="px-4 py-2 rounded-lg border" />
-                            </div>
-                            <textarea name="description" rows="3" placeholder="Description" defaultValue={editing?.description || ''} className="w-full px-4 py-2 rounded-lg border" />
-                            <div className="flex gap-3">
-                                <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg">{editing ? '💾 Update' : '➕ Add'}</button>
-                                {editing && <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 bg-gray-500 text-white rounded-lg">Cancel</button>}
-                            </div>
-                        </form>
-                        {experiences.map(exp => (
-                            <div key={exp.id} className="flex justify-between p-4 bg-gray-50 rounded-lg mb-2">
-                                <div>{exp.title} at {exp.company}</div>
-                                <div className="flex gap-2">
-                                    <button onClick={() => editExperience(exp)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm">✏️</button>
-                                    <button onClick={() => deleteExperience(exp.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm">🗑️</button>
-                                </div>
-                            </div>
-                        ))}
+            {/* Excerpt */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Excerpt (Short Summary)</label>
+                <textarea name="excerpt" rows="2" placeholder="A short summary of the news..." defaultValue={editing?.excerpt || ''} 
+                    className="w-full px-4 py-2 rounded-lg border"></textarea>
+            </div>
+
+            {/* Content */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Content *</label>
+                <textarea name="content" rows="5" placeholder="Write the full news content..." defaultValue={editing?.content || ''} required 
+                    className="w-full px-4 py-2 rounded-lg border"></textarea>
+            </div>
+
+            {/* Image Upload */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">News Image (Optional)</label>
+                {editing?.image && (
+                    <div className="mb-2">
+                        <img src={editing.image} alt="Current" className="w-32 h-20 object-cover rounded border" />
                     </div>
                 )}
+                <input type="file" name="image" accept="image/*" className="w-full px-4 py-2 rounded-lg border bg-white" />
+            </div>
+
+            {/* Published Checkbox */}
+            <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="published" defaultChecked={editing?.published !== false} 
+                    className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                <span className="text-sm font-medium text-gray-700">Published</span>
+            </label>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+                <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                    {editing ? '💾 Update News' : '➕ Add News'}
+                </button>
+                {editing && (
+                    <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        Cancel
+                    </button>
+                )}
+            </div>
+        </form>
+
+        {/* News List */}
+        {newsList.length > 0 ? (
+            newsList.map(item => (
+                <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-2">
+                    <div className="flex items-center gap-3">
+                        {item.image ? (
+                            <img src={item.image} alt={item.title} className="w-10 h-10 rounded object-cover" />
+                        ) : (
+                            <div className="w-10 h-10 bg-gray-300 rounded flex items-center justify-center text-sm">📰</div>
+                        )}
+                        <div>
+                            <span className="font-medium">{item.title}</span>
+                            <span className="text-xs ml-2 bg-blue-100 dark:bg-blue-900 px-2 py-0.5 rounded">{item.category}</span>
+                            {!item.published && <span className="text-xs ml-2 bg-red-100 px-2 py-0.5 rounded">Draft</span>}
+                        </div>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => editNews(item)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">✏️</button>
+                        <button onClick={() => deleteNews(item.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">🗑️</button>
+                    </div>
+                </div>
+            ))
+        ) : (
+            <p className="text-gray-500 text-center py-4">No news articles yet.</p>
+        )}
+    </div>
+)}
+
+                {/* EXPERIENCES */}
+               {activeTab === 'experiences' && (
+    <div className="bg-white rounded-xl p-6 shadow-lg">
+        <h2 className="text-xl font-bold mb-6">{editing ? '✏️ Edit' : '➕ Add'} Experience</h2>
+        <form onSubmit={saveExperience} className="space-y-4 max-w-3xl mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Job Title */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Job Title *</label>
+                    <input name="title" placeholder="e.g. Full Stack Developer" defaultValue={editing?.title || ''} required 
+                        className="w-full px-4 py-2 rounded-lg border" />
+                </div>
+
+                {/* Company */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Company *</label>
+                    <input name="company" placeholder="e.g. Freelance, Tech Corp" defaultValue={editing?.company || ''} required 
+                        className="w-full px-4 py-2 rounded-lg border" />
+                </div>
+
+                {/* Duration */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Duration *</label>
+                    <input name="duration" placeholder="e.g. 2023 - Present" defaultValue={editing?.duration || ''} required 
+                        className="w-full px-4 py-2 rounded-lg border" />
+                </div>
+            </div>
+
+            {/* Description */}
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea name="description" rows="3" placeholder="Describe your responsibilities and achievements..." defaultValue={editing?.description || ''} 
+                    className="w-full px-4 py-2 rounded-lg border"></textarea>
+            </div>
+
+            {/* Order (hidden but useful) */}
+            <input type="hidden" name="order" defaultValue={editing?.order || experiences.length + 1} />
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+                <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                    {editing ? '💾 Update Experience' : '➕ Add Experience'}
+                </button>
+                {editing && (
+                    <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        Cancel
+                    </button>
+                )}
+            </div>
+        </form>
+
+        {/* Experience List */}
+        {experiences.length > 0 ? (
+            experiences.map(exp => (
+                <div key={exp.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-2">
+                    <div>
+                        <span className="font-medium">{exp.title}</span>
+                        <span className="text-gray-600"> at </span>
+                        <span className="font-medium text-indigo-600">{exp.company}</span>
+                        <span className="text-xs text-gray-400 ml-2">({exp.duration})</span>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => editExperience(exp)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">✏️</button>
+                        <button onClick={() => deleteExperience(exp.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">🗑️</button>
+                    </div>
+                </div>
+            ))
+        ) : (
+            <p className="text-gray-500 text-center py-4">No experience added yet.</p>
+        )}
+    </div>
+)}
 
 
                 {/* MESSAGES TAB */}

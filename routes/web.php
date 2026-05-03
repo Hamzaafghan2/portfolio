@@ -68,6 +68,13 @@ Route::get('/sitemap.xml', function () {
     return response()->view('sitemap')->header('Content-Type', 'text/xml');
 });
 
+Route::get('/about', fn() => Inertia::render('AboutPage'));
+Route::get('/services', fn() => Inertia::render('ServicesPage'));
+Route::get('/skills', fn() => Inertia::render('SkillsPage'));
+Route::get('/testimonials', fn() => Inertia::render('TestimonialsPage'));
+Route::get('/experience', fn() => Inertia::render('ExperiencePage'));
+Route::get('/contact', fn() => Inertia::render('ContactPage'));
+
 // Route::get('/language/{locale}', function ($locale) {
 //     if (in_array($locale, ['en', 'fa', 'ps'])) {
 //         return redirect('/')->withCookie(cookie('locale', $locale, 60 * 24 * 30));

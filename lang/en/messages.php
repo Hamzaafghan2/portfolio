@@ -51,4 +51,10 @@ return [
     'back_to_home' => 'Back to Home',
     'projects_desc' => 'Explore all my projects and works.',
     'no_projects' => 'No projects found.',
+    'about_desc' => 'Learn more about my journey and passion.',
+'services_desc' => 'What I can do for you.',
+'skills_desc' => 'Technologies and tools I work with.',
+'testimonials_desc' => 'Feedback from people I have worked with.',
+'experience_desc' => 'My professional journey.',
+'contact_desc' => 'Have a project in mind? Let us talk.',
 ];

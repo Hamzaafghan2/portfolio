@@ -17,7 +17,7 @@ export default function Layout({ children }) {
     const [contact, setContact] = useState(null);
     const { translations, locale } = usePage().props;
     const [langOpen, setLangOpen] = useState(false);
-
+    
 
     useEffect(() => {
         axios.get('/api/about').then(res => setAbout(res.data));
@@ -35,22 +35,45 @@ export default function Layout({ children }) {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    useEffect(() => {
+    const rtlLanguages = ['fa', 'ps'];
+    if (rtlLanguages.includes(locale)) {
+        document.documentElement.dir = 'rtl';
+        document.documentElement.classList.add('rtl');
+    } else {
+        document.documentElement.dir = 'ltr';
+        document.documentElement.classList.remove('rtl');
+    }
+}, [locale]);
+
     const toggleDark = () => setDarkMode(!darkMode);
     const isHomePage = window.location.pathname === '/';
 
 
 
+    // const navItems = [
+    //     { key: 'home', label: translations?.home || 'Home' },
+    //     { key: 'about', label: translations?.about || 'About' },
+    //     { key: 'services', label: translations?.services || 'Services' },
+    //     { key: 'skills', label: translations?.skills || 'Skills' },
+    //     { key: 'projects', label: translations?.projects || 'Projects' },
+    //     { key: 'news', label: translations?.news || 'News' },
+    //     { key: 'testimonials', label: translations?.testimonials || 'Testimonials' },
+    //     { key: 'experience', label: translations?.experience || 'Experience' },
+    //     { key: 'contact', label: translations?.contact || 'Contact' },
+    // ];
+
     const navItems = [
-        { key: 'home', label: translations?.home || 'Home' },
-        { key: 'about', label: translations?.about || 'About' },
-        { key: 'services', label: translations?.services || 'Services' },
-        { key: 'skills', label: translations?.skills || 'Skills' },
-        { key: 'projects', label: translations?.projects || 'Projects' },
-        { key: 'news', label: translations?.news || 'News' },
-        { key: 'testimonials', label: translations?.testimonials || 'Testimonials' },
-        { key: 'experience', label: translations?.experience || 'Experience' },
-        { key: 'contact', label: translations?.contact || 'Contact' },
-    ];
+    { key: 'home', path: '/', label: translations?.home || 'Home' },
+    { key: 'about', path: '/about', label: translations?.about || 'About' },
+    { key: 'services', path: '/services', label: translations?.services || 'Services' },
+    { key: 'skills', path: '/skills', label: translations?.skills || 'Skills' },
+    { key: 'projects', path: '/projects', label: translations?.projects || 'Projects' },
+    { key: 'news', path: '/news', label: translations?.news || 'News' },
+    { key: 'testimonials', path: '/testimonials', label: translations?.testimonials || 'Testimonials' },
+    { key: 'experience', path: '/experience', label: translations?.experience || 'Experience' },
+    { key: 'contact', path: '/contact', label: translations?.contact || 'Contact' },
+];
 
     return (
         <>
@@ -76,105 +99,100 @@ export default function Layout({ children }) {
                             )}
                         </a>
 
-                        <div className="hidden md:flex items-center space-x-6">
-                            {navItems.map((item) => (
-                                isHomePage ? (
-                                    <ScrollLink key={item.key} to={item.key} smooth={true} duration={500} offset={-70}
-                                        className="cursor-pointer text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium text-base transition">
-                                        {item.label}
-                                    </ScrollLink>
-                                ) : (
-                                    <a key={item.key} href={`/#${item.key}`}
-                                        className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium text-base transition">
-                                        {item.label}
-                                    </a>
-                                )
-                            ))}
 
-                            <div className="relative border-r border-gray-300 dark:border-gray-700 pr-4 mr-2">
-                                <button
-                                    onClick={() => setLangOpen(!langOpen)}
-                                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-                                >
-                                    🌐
-                                    <span>
-                                        {locale === "en"
-                                            ? "EN"
-                                            : locale === "fa"
-                                                ? "دری"
-                                                : locale === "ps"
-                                                    ? "پښتو"
-                                                    : "Language"}
-                                    </span>
-                                    <span className={`transition ${langOpen ? "rotate-180" : ""}`}>⌄</span>
-                                </button>
+                       <div className="hidden md:flex items-center gap-6">
+    {navItems.map((item) => (
+        <a key={item.key} href={item.path}
+            className="cursor-pointer text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium text-sm transition">
+            {item.label}
+        </a>
+    ))}
 
-                                {langOpen && (
-                                    <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50">
+    {/* Language Switcher */}
 
-                                        <a
-                                            href="/language/en"
-                                            className={`block px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition ${locale === "en" ? "bg-indigo-600 text-white" : "text-gray-700 dark:text-gray-300"
-                                                }`}
-                                        >
-                                            🇬🇧 English
-                                        </a>
+                <div className="relative border-r border-gray-300 dark:border-gray-700 pr-4 mr-2">
+                <button
+                    onClick={() => setLangOpen(!langOpen)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                >
+                    🌐
+                    <span>
+                        {locale === "en"
+                            ? "EN"
+                            : locale === "fa"
+                                ? "دری"
+                                : locale === "ps"
+                                    ? "پښتو"
+                                    : "Language"}
+                    </span>
+                    <span className={`transition ${langOpen ? "rotate-180" : ""}`}>⌄</span>
+                </button>
 
-                                        <a
-                                            href="/language/fa"
-                                            className={`block px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition ${locale === "fa" ? "bg-indigo-600 text-white" : "text-gray-700 dark:text-gray-300"
-                                                }`}
-                                        >
-                                            🇦🇫 دری
-                                        </a>
+                {langOpen && (
+                    <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50">
 
-                                        <a
-                                            href="/language/ps"
-                                            className={`block px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition ${locale === "ps" ? "bg-indigo-600 text-white" : "text-gray-700 dark:text-gray-300"
-                                                }`}
-                                        >
-                                            🇦🇫 پښتو
-                                        </a>
+                        <a
+                            href="/language/en"
+                            className={`block px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition ${locale === "en" ? "bg-indigo-600 text-white" : "text-gray-700 dark:text-gray-300"
+                                }`}
+                        >
+                            🇬🇧 English
+                        </a>
 
-                                    </div>
-                                )}
-                            </div>
+                        <a
+                            href="/language/fa"
+                            className={`block px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition ${locale === "fa" ? "bg-indigo-600 text-white" : "text-gray-700 dark:text-gray-300"
+                                }`}
+                        >
+                            🇦🇫 دری
+                        </a>
 
-                            <button onClick={toggleDark} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition text-xl">
-                                {darkMode ? '☀️' : '🌙'}
-                            </button>
-                        </div>
+                        <a
+                            href="/language/ps"
+                            className={`block px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition ${locale === "ps" ? "bg-indigo-600 text-white" : "text-gray-700 dark:text-gray-300"
+                                }`}
+                        >
+                            🇦🇫 پښتو
+                        </a>
+
+                    </div>
+                )}
+           </div>
+   
+
+    <button onClick={toggleDark} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition text-xl">
+        {darkMode ? '☀️' : '🌙'}
+    </button>
+</div>
 
                         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 text-2xl">
                             {menuOpen ? '✕' : '☰'}
                         </button>
                     </div>
 
+
                     {menuOpen && (
-                        <div className="md:hidden bg-white dark:bg-gray-900 border-t px-4 py-4">
-                            <div className="flex flex-col space-y-4">
-                                {navItems.map((item) => (
-                                    isHomePage ? (
-                                        <ScrollLink key={item.key} to={item.key} smooth={true} duration={500} offset={-70}
-                                            onClick={() => setMenuOpen(false)}
-                                            className="cursor-pointer text-gray-700 dark:text-gray-300 hover:text-indigo-600 font-medium transition py-2">
-                                            {item.label}
-                                        </ScrollLink>
-                                    ) : (
-                                        <a key={item.key} href={`/#${item.key}`} onClick={() => setMenuOpen(false)}
-                                            className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 font-medium transition py-2">
-                                            {item.label}
-                                        </a>
-                                    )
-                                ))}
-                                <button onClick={() => { toggleDark(); setMenuOpen(false); }}
-                                    className="flex items-center gap-2 text-gray-700 dark:text-gray-300 py-2">
-                                    <span className="text-xl">{darkMode ? '☀️' : '🌙'}</span>
-                                    <span>{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
-                                </button>
-                            </div>
-                        </div>
-                    )}
+    <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-4">
+        <div className="flex flex-col space-y-4">
+            {navItems.map((item) => (
+                <a key={item.key} href={item.path} onClick={() => setMenuOpen(false)}
+                    className="cursor-pointer text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition py-2">
+                    {item.label}
+                </a>
+            ))}
+
+           <div className="flex gap-2 py-2">
+                <a href="/language/en" onClick={(e) => { e.preventDefault(); window.location.href = '/language/en'; setMenuOpen(false); }}
+                    className="px-3 py-1 text-xs rounded bg-gray-100 dark:bg-gray-800">🇬🇧 EN</a>
+                <a href="/language/fa" onClick={(e) => { e.preventDefault(); window.location.href = '/language/fa'; setMenuOpen(false); }}
+                    className="px-3 py-1 text-xs rounded bg-gray-100 dark:bg-gray-800">🇦🇫 دری</a>
+                <a href="/language/ps" onClick={(e) => { e.preventDefault(); window.location.href = '/language/ps'; setMenuOpen(false); }}
+                    className="px-3 py-1 text-xs rounded bg-gray-100 dark:bg-gray-800">🇦🇫 پښتو</a>
+            </div> 
+                
+        </div>
+    </div>
+)}
                 </nav>
 
                 <main className="pt-16">{children}</main>

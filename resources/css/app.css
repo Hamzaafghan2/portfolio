@@ -69,3 +69,12 @@
   background-size: 200% 200%;
   animation: gradient 4s ease infinite;
 }
+
+/* RTL Support */
+[dir="rtl"] .rtl-flip {
+    transform: scaleX(-1);
+}
+
+[dir="rtl"] .nav-container {
+    flex-direction: row-reverse;
+}
