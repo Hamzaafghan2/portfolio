@@ -3,11 +3,11 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import Layout from './Layout';
 import { usePage } from '@inertiajs/react';
-import LoadingScreen from '../Components/LoadingScreen';
+
 
 export default function AllProjects() {
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const { translations } = usePage().props;
 
   useEffect(() => {
@@ -15,13 +15,13 @@ export default function AllProjects() {
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
   }, []);
-    useEffect(() => {
-      setTimeout(() => setLoading(false), 1500);
-  }, []);
+  //   useEffect(() => {
+  //     setTimeout(() => setLoading(false), 1500);
+  // }, []);
 
   return (
-       <>  <LoadingScreen isLoading={loading} />
-              {!loading && (
+      //  <>  <LoadingScreen isLoading={loading} />
+      //         {!loading && (
     <Layout>
       {/* Header */}
       <div className="bg-gradient-to-br from-indigo-900 to-purple-900 text-white py-20">
@@ -96,7 +96,7 @@ export default function AllProjects() {
         )}
       </div>
     </Layout>
-    )}
-        </>
+    // )}
+    //     </>
   );
 }

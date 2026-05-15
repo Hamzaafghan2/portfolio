@@ -1,25 +1,21 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Layout from './Layout';
-import LoadingScreen from '../Components/LoadingScreen';
+
 
 export default function AllNews() {
     const [news, setNews] = useState([]);
-    const [loading, setLoading] = useState(true);
+    
 
     useEffect(() => {
         axios.get('/api/news/all')
             .then(res => setNews(res.data))
             .catch(err => console.error(err));
     }, []);
-       useEffect(() => {
-      setTimeout(() => setLoading(false), 1500);
-  }, []);
+  
 
     return (
-         <>
-        <LoadingScreen isLoading={loading} />
-        {!loading && (
+        
         <Layout>
             <div className="bg-gray-50 dark:bg-gray-900">
                 {/* Header */}
@@ -85,7 +81,6 @@ export default function AllNews() {
                 </div>
             </div>
         </Layout>
-        )}
-        </>
+       
     );
 }

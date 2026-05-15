@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -8,7 +7,6 @@ import Layout from "./Layout";
 import { usePage } from '@inertiajs/react';
 import { FaGithub, FaLinkedin, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import LoadingScreen from '../Components/LoadingScreen';
 import CountUp from 'react-countup';
 
 export default function Portfolio() {
@@ -22,12 +20,9 @@ export default function Portfolio() {
     const [contact, setContact] = useState(null);
     const [sending, setSending] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => { AOS.init({ duration: 800, once: true }); }, []);
-        useEffect(() => {
-         setTimeout(() => setLoading(false), 1500);
-        }, []);
+    
     useEffect(() => {
         axios.get('/api/about').then(res => setAbout(res.data));
         axios.get('/api/skills').then(res => setSkills(res.data));
@@ -63,8 +58,6 @@ export default function Portfolio() {
     const { translations } = usePage().props;
 
     return (
-        <>  <LoadingScreen isLoading={loading} />
-        {!loading && (
         <Layout>
             {/* HERO */}
             <section id="home" className="relative min-h-screen flex items-center bg-[#0b1120] px-4 overflow-hidden">
@@ -102,10 +95,9 @@ export default function Portfolio() {
                     <div className="space-y-6">
                         <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
                             <p className="text-gray-400">{translations?.projects || 'Projects'} Completed</p>
-                            {/* <h3 className="text-4xl text-cyan-400 font-bold">{about?.projects_done || '0'}+</h3> */}
                             <h3 className="text-4xl text-cyan-400 font-bold">
-                 <CountUp end={about?.projects_done || 0} duration={2.5} suffix="+" />
-                </h3>
+                                <CountUp end={about?.projects_done || 0} duration={2.5} suffix="+" />
+                            </h3>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
@@ -156,10 +148,9 @@ export default function Portfolio() {
                                         ['technologies_count', translations?.tech_count || 'Technologies']
                                     ].map(([key, label]) => (
                                         <div key={key} className="bg-white dark:bg-gray-900 shadow-lg rounded-2xl p-6 hover:-translate-y-1 transition">
-                                            {/* <h4 className="text-4xl font-bold text-indigo-600 mb-2">{about[key]}+</h4> */}
                                             <h4 className="text-4xl font-bold text-indigo-600 mb-2">
-                                 <CountUp end={about[key]} duration={2} suffix="+" />
-                                </h4>
+                                                <CountUp end={about[key]} duration={2} suffix="+" />
+                                            </h4>
                                             <p className="text-gray-600 dark:text-gray-300 text-sm">{label}</p>
                                         </div>
                                     ))}
@@ -225,40 +216,38 @@ export default function Portfolio() {
                         {translations?.projects || 'My Projects'}
                     </h2>
                     {projects.length > 0 ? (
-                          <>
-        <div className="grid md:grid-cols-3 gap-8">
-            {projects.map(project => (
-                <motion.div key={project.id} whileHover={{ y: -8 }} className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition">
-                    <div className="h-48 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                        {project.image ? <img src={project.image} alt={project.title} className="w-full h-full object-cover" /> : <span className="text-white text-4xl">🚀</span>}
-                    </div>
-                    <div className="p-6">
-                        <h3 className="font-bold text-xl mb-2">
-                            <a href={`/projects/${project.id}`} className="text-gray-900 dark:text-white hover:text-indigo-600 transition">{project.title}</a>
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{project.description}</p>
-                        <div className="flex gap-2 flex-wrap mb-4">
-                            {project.technologies?.map(tech => <span key={tech} className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full text-sm">{tech}</span>)}
-                        </div>
-                        <div className="flex gap-3">
-                            <a href={`/projects/${project.id}`} className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline text-sm">
-                                {translations?.view_details || 'View Details'} →
-                            </a>
-                            {project.url && <a href={project.url} target="_blank" className="text-indigo-600 font-medium hover:underline text-sm">{translations?.live_demo || 'Live Demo'} →</a>}
-                            {project.github_url && <a href={project.github_url} target="_blank" className="text-gray-600 font-medium hover:underline text-sm">GitHub →</a>}
-                        </div>
-                    </div>
-                   </motion.div>
-                    ))}
-                  </div>
-                     {/* View All Button — ADD IT HERE 👇 */}
-                <div className="text-center mt-10">
-                    <a href="/projects" className="px-8 py-3 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition inline-block">
-                        {translations?.view_all_projects || 'View All Projects'} →
-                    </a>
-                </div>
-            </>
-
+                        <>
+                            <div className="grid md:grid-cols-3 gap-8">
+                                {projects.map(project => (
+                                    <motion.div key={project.id} whileHover={{ y: -8 }} className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition">
+                                        <div className="h-48 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                            {project.image ? <img src={project.image} alt={project.title} className="w-full h-full object-cover" /> : <span className="text-white text-4xl">🚀</span>}
+                                        </div>
+                                        <div className="p-6">
+                                            <h3 className="font-bold text-xl mb-2">
+                                                <a href={`/projects/${project.id}`} className="text-gray-900 dark:text-white hover:text-indigo-600 transition">{project.title}</a>
+                                            </h3>
+                                            <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{project.description}</p>
+                                            <div className="flex gap-2 flex-wrap mb-4">
+                                                {project.technologies?.map(tech => <span key={tech} className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full text-sm">{tech}</span>)}
+                                            </div>
+                                            <div className="flex gap-3">
+                                                <a href={`/projects/${project.id}`} className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline text-sm">
+                                                    {translations?.view_details || 'View Details'} →
+                                                </a>
+                                                {project.url && <a href={project.url} target="_blank" className="text-indigo-600 font-medium hover:underline text-sm">{translations?.live_demo || 'Live Demo'} →</a>}
+                                                {project.github_url && <a href={project.github_url} target="_blank" className="text-gray-600 font-medium hover:underline text-sm">GitHub →</a>}
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                            <div className="text-center mt-10">
+                                <a href="/projects" className="px-8 py-3 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition inline-block">
+                                    {translations?.view_all_projects || 'View All Projects'} →
+                                </a>
+                            </div>
+                        </>
                     ) : (<div className="text-center text-gray-500 py-10">{translations?.loading || 'Loading...'}</div>)}
                 </div>
             </section>
@@ -303,44 +292,40 @@ export default function Portfolio() {
                     </h2>
                     {news.length > 0 ? (
                         <>
-                <div className="grid md:grid-cols-3 gap-8">
-                    {news.map(item => (
-                        <div key={item.id} className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition">
-                            <div className="h-40 bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
-                                {item.image ? <img src={item.image} alt={item.title} className="w-full h-full object-cover" /> : <span className="text-white text-3xl">📰</span>}
+                            <div className="grid md:grid-cols-3 gap-8">
+                                {news.map(item => (
+                                    <div key={item.id} className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition">
+                                        <div className="h-40 bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                                            {item.image ? <img src={item.image} alt={item.title} className="w-full h-full object-cover" /> : <span className="text-white text-3xl">📰</span>}
+                                        </div>
+                                        <div className="p-6">
+                                            <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900 px-3 py-1 rounded-full">{item.category}</span>
+                                            <h3 className="font-bold text-lg mt-3 mb-2">
+                                                <a href={`/news/${item.slug}`} className="text-gray-900 dark:text-white hover:text-indigo-600 transition">{item.title}</a>
+                                            </h3>
+                                            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{item.excerpt}</p>
+                                            <span className="text-xs text-gray-400">{new Date(item.published_at).toLocaleDateString()}</span>
+                                            <div className="mt-4">
+                                                <a
+                                                    href={`/news/${item.slug}`}
+                                                    className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                                                >
+                                                    <span>Read More</span>
+                                                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                                                        →
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                            <div className="p-6">
-                                <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900 px-3 py-1 rounded-full">{item.category}</span>
-                                <h3 className="font-bold text-lg mt-3 mb-2">
-                                    <a href={`/news/${item.slug}`} className="text-gray-900 dark:text-white hover:text-indigo-600 transition">{item.title}</a>
-
-                                </h3>
-                                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{item.excerpt}</p>
-                                <span className="text-xs text-gray-400">{new Date(item.published_at).toLocaleDateString()}</span>
-
-                            <div className="mt-4">
-                            <a
-                                href={`/news/${item.slug}`}
-                                className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-                            >
-                                <span>Read More</span>
-
-                                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                                →
-                                </span>
-                            </a>
+                            <div className="text-center mt-10">
+                                <a href="/news" className="px-8 py-3 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition inline-block">
+                                    {translations?.view_all_news || 'View All News'} →
+                                </a>
                             </div>
-                            </div>
-                            
-                            </div>
-                        ))}
-                    </div>
-                    <div className="text-center mt-10">
-                        <a href="/news" className="px-8 py-3 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition inline-block">
-                            {translations?.view_all_news || 'View All News'} →
-                        </a>
-                    </div>
-                </>
+                        </>
                     ) : <div className="text-center text-gray-500 py-10">{translations?.loading || 'Loading...'}</div>}
                 </div>
             </section>
@@ -407,7 +392,5 @@ export default function Portfolio() {
                 </div>
             </section>
         </Layout>
-             )}
-        </>
     );
 }
